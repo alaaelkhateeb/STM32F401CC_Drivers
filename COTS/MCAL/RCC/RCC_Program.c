@@ -21,14 +21,17 @@ RCC_tenuErrorStatus RCC_enuEnableHSI(void) {
 	u32 Loc_u32RegTemp = 0;
 	RCC_tenuErrorStatus Loc_enuStatus = RCC_enuOK;
 	Loc_u32RegTemp = RCC_CR_REG;
-	if ((GET_BIT(Loc_u32RegTemp, 16)) == 1) {
-		CLR_BIT(Loc_u32RegTemp, 16);
-	}
+
 	RCC_CR_REG = Loc_u32RegTemp;
 	Loc_u32RegTemp = RCC_CR_REG;
 	/*set HSION*/
 
 	SET_BIT(Loc_u32RegTemp, 0);
+
+	if ((GET_BIT(Loc_u32RegTemp, 16)) == 1) {
+		CLR_BIT(Loc_u32RegTemp, 16);
+	}
+
 	RCC_CR_REG = Loc_u32RegTemp;
 
 	/*wait until HSIRDY*/
@@ -40,25 +43,6 @@ RCC_tenuErrorStatus RCC_enuEnableHSI(void) {
 		Loc_enuStatus = RCC_enuTimeOut;
 	}
 
-	/*ENABLE HSI SW */
-
-	//RCC_CFGR_REG=(RCC_CFGR_REG&0xFFFFFFF0);
-	Loc_u32RegTemp = RCC_CFGR_REG;
-
-	CLR_BIT(Loc_u32RegTemp, 0);
-	CLR_BIT(Loc_u32RegTemp, 1);
-	RCC_CFGR_REG = Loc_u32RegTemp;
-
-	/*WAIT TO CHECK SWS FOR HSI */
-	while (!((GET_BIT(RCC_CFGR_REG, 2)) == 0 && (GET_BIT(RCC_CFGR_REG, 3)) == 0)
-			&& (Loc_u16ErrorCount--) > 0)
-		;
-	if (Loc_u16ErrorCount > 0 && (GET_BIT(RCC_CFGR_REG, 2)) == 0
-			&& (GET_BIT(RCC_CFGR_REG, 3)) == 0) {
-		Loc_enuStatus = RCC_enuOK;
-	} else {
-		Loc_enuStatus = RCC_enuTimeOut;
-	}
 	return Loc_enuStatus;
 }
 RCC_tenuErrorStatus RCC_enuEnableHSE(void) {
@@ -75,33 +59,15 @@ RCC_tenuErrorStatus RCC_enuEnableHSE(void) {
 	RCC_CR_REG = Loc_u32RegTemp;
 
 	/*wait until HSERDY*/
-	while ((GET_BIT(RCC_CR_REG, 17)) == 0 && (Loc_u16ErrorCount--) > 0)
-		;
-	if (Loc_u16ErrorCount > 0 && (GET_BIT(RCC_CR_REG, 17)) == 1) {
+	while ((GET_BIT(RCC_CR_REG, 17)) != 1 && (Loc_u16ErrorCount) > 0) {
+		Loc_u16ErrorCount--;
+	}
+	if ((GET_BIT(RCC_CR_REG, 17)) == 1) {
 		Loc_enuStatus = RCC_enuOK;
 	} else {
 		Loc_enuStatus = RCC_enuTimeOut;
 	}
 
-	/*ENABLE HSE SW */
-	/*RCC_CFGR_REG=(RCC_CFGR_REG&0xFFFFFFF0)|0X00000001*/
-
-	Loc_u32RegTemp = RCC_CFGR_REG;
-	SET_BIT(Loc_u32RegTemp, 0);
-	CLR_BIT(Loc_u32RegTemp, 1);
-
-	RCC_CFGR_REG = Loc_u32RegTemp;
-
-	/*WAIT TO CHECK SWS FOR HSE */
-	while (((GET_BIT(RCC_CFGR_REG, 2)) == 1 && (GET_BIT(RCC_CFGR_REG, 3)) == 0)
-			&& (Loc_u16ErrorCount--) > 0)
-		;
-	if (Loc_u16ErrorCount > 0 && (GET_BIT(RCC_CFGR_REG, 2)) == 1
-			&& (GET_BIT(RCC_CFGR_REG, 3)) == 0) {
-		Loc_enuStatus = RCC_enuOK;
-	} else {
-		Loc_enuStatus = RCC_enuTimeOut;
-	}
 	return Loc_enuStatus;
 
 }
@@ -174,7 +140,7 @@ RCC_tenuErrorStatus RCC_enuConfigPLL(u16 PLLN, u8 PLLM, u8 PLLP, u8 PLLQ) {
 	return Loc_enuStatus;
 
 }
-RCC_tenuErrorStatus RCC_enuEnablePLL(RCC_tenuPLLSrcCLKSelection RCC_enuSelect) {
+RCC_tenuErrorStatus RCC_enuEnablePLL(RCC_tenuSrcCLKSelection RCC_enuSelect) {
 	u16 Loc_u16ErrorCount = 0xFF;
 	u32 Loc_u32RegTemp = 0;
 
@@ -207,22 +173,80 @@ RCC_tenuErrorStatus RCC_enuEnablePLL(RCC_tenuPLLSrcCLKSelection RCC_enuSelect) {
 		Loc_enuStatus = RCC_enuTimeOut;
 	}
 
-	/*ENABLE PLL SW */
-	/*RCC_CFGR_REG=(RCC_CFGR_REG&0xFFFFFFF0)|0X00000010*/
-	Loc_u32RegTemp = RCC_CFGR_REG;
-	SET_BIT(Loc_u32RegTemp, 1);
-	CLR_BIT(Loc_u32RegTemp, 0);
-	RCC_CFGR_REG = Loc_u32RegTemp;
-	/*WAIT TO CHECK SWS FOR PLL */
-	while (!((GET_BIT(RCC_CFGR_REG, 2)) == 0 && (GET_BIT(RCC_CFGR_REG, 3)) == 1)
-			&& (Loc_u16ErrorCount--) > 0)
-		;
-	if (Loc_u16ErrorCount > 0 && (GET_BIT(RCC_CFGR_REG, 2)) == 0
-			&& (GET_BIT(RCC_CFGR_REG, 3)) == 1) {
-		Loc_enuStatus = RCC_enuOK;
-	} else {
-		Loc_enuStatus = RCC_enuTimeOut;
+	return Loc_enuStatus;
+}
+
+RCC_tenuErrorStatus RCC_enuEnableSystemCLK(
+		RCC_tenuSrcCLKSelection Rcc_ClkSelect) {
+	u16 Loc_u16ErrorCount = 0xFFFF;
+	u32 Loc_u32RegTemp = 0;
+	RCC_tenuErrorStatus Loc_enuStatus = RCC_enuOK;
+	switch (Rcc_ClkSelect) {
+	case RCC_enuHSE:
+		/*ENABLE HSE SW */
+		/*RCC_CFGR_REG=(RCC_CFGR_REG&0xFFFFFFF0)|0X00000001*/
+
+		Loc_u32RegTemp = RCC_CFGR_REG;
+		SET_BIT(Loc_u32RegTemp, 0);
+		CLR_BIT(Loc_u32RegTemp, 1);
+
+		RCC_CFGR_REG = Loc_u32RegTemp;
+
+		/*WAIT TO CHECK SWS FOR HSE */
+		while (((GET_BIT(RCC_CFGR_REG, 2)) != 1
+				&& (GET_BIT(RCC_CFGR_REG, 3)) != 0) && (Loc_u16ErrorCount) > 0) {
+			Loc_u16ErrorCount--;
+		}
+
+		if ((GET_BIT(RCC_CFGR_REG, 2)) == 1
+				&& (GET_BIT(RCC_CFGR_REG, 3)) == 0) {
+			Loc_enuStatus = RCC_enuOK;
+		} else {
+			Loc_enuStatus = RCC_enuTimeOut;
+		}
+		break;
+	case RCC_enuHSI:
+		/*ENABLE HSI SW */
+
+		//RCC_CFGR_REG=(RCC_CFGR_REG&0xFFFFFFF0);
+		Loc_u32RegTemp = RCC_CFGR_REG;
+
+		CLR_BIT(Loc_u32RegTemp, 0);
+		CLR_BIT(Loc_u32RegTemp, 1);
+		RCC_CFGR_REG = Loc_u32RegTemp;
+
+		/*WAIT TO CHECK SWS FOR HSI */
+		while (((GET_BIT(RCC_CFGR_REG, 2)) != 0
+				&& (GET_BIT(RCC_CFGR_REG, 3)) != 0)
+				&& (Loc_u16ErrorCount--) > 0)
+			;
+		if (Loc_u16ErrorCount > 0 && (GET_BIT(RCC_CFGR_REG, 2)) == 0
+				&& (GET_BIT(RCC_CFGR_REG, 3)) == 0) {
+			Loc_enuStatus = RCC_enuOK;
+		} else {
+			Loc_enuStatus = RCC_enuTimeOut;
+		}
+		break;
+	case RCC_enuPLL:
+		/*ENABLE PLL SW */
+		/*RCC_CFGR_REG=(RCC_CFGR_REG&0xFFFFFFF0)|0X00000010*/
+		Loc_u32RegTemp = RCC_CFGR_REG;
+		SET_BIT(Loc_u32RegTemp, 1);
+		CLR_BIT(Loc_u32RegTemp, 0);
+		RCC_CFGR_REG = Loc_u32RegTemp;
+		/*WAIT TO CHECK SWS FOR PLL */
+		while (!((GET_BIT(RCC_CFGR_REG, 2)) == 0
+				&& (GET_BIT(RCC_CFGR_REG, 3)) == 1) && (Loc_u16ErrorCount--) > 0)
+			;
+		if (Loc_u16ErrorCount > 0 && (GET_BIT(RCC_CFGR_REG, 2)) == 0
+				&& (GET_BIT(RCC_CFGR_REG, 3)) == 1) {
+			Loc_enuStatus = RCC_enuOK;
+		} else {
+			Loc_enuStatus = RCC_enuTimeOut;
+		}
+		break;
 	}
+
 	return Loc_enuStatus;
 }
 
@@ -244,6 +268,38 @@ void RCC_vidEnableDisAHB1ClkPerpheral(
 	}
 
 }
+void RCC_vidEnableDisAPB1ClkPerpheral(
+		RCC_tenuAPB1PeripheralEn RCC_enuPeripheralSelection,
+		RCC_tenuEnDisPeripheral RCC_enuSelect){
+	u32 Loc_u32RegTemp = 0;
+	Loc_u32RegTemp = RCC_APB1ENR_REG;
+	/*set peripheral pin to enable clk*/
+	if (RCC_enuSelect == RCC_enuEnPeripheral) {
+
+		SET_BIT(Loc_u32RegTemp, RCC_enuPeripheralSelection);
+		RCC_APB1ENR_REG = Loc_u32RegTemp;
+		/*clear peripheral pin to disable clk*/
+	} else if (RCC_enuSelect == RCC_enuDisablePeripheral) {
+		CLR_BIT(Loc_u32RegTemp, RCC_enuPeripheralSelection);
+		RCC_APB1ENR_REG = Loc_u32RegTemp;
+	}
+}
+void RCC_vidEnableDisAPB2ClkPerpheral(
+		RCC_tenuAPB2PeripheralEn RCC_enuPeripheralSelection,
+		RCC_tenuEnDisPeripheral RCC_enuSelect){
+	u32 Loc_u32RegTemp = 0;
+	Loc_u32RegTemp = RCC_APB2ENR_REG;
+	/*set peripheral pin to enable clk*/
+	if (RCC_enuSelect == RCC_enuEnPeripheral) {
+
+		SET_BIT(Loc_u32RegTemp, RCC_enuPeripheralSelection);
+		RCC_APB2ENR_REG = Loc_u32RegTemp;
+		/*clear peripheral pin to disable clk*/
+	} else if (RCC_enuSelect == RCC_enuDisablePeripheral) {
+		CLR_BIT(Loc_u32RegTemp, RCC_enuPeripheralSelection);
+		RCC_APB2ENR_REG = Loc_u32RegTemp;
+	}
+}
 
 void RCC_vidSetPrescalerAPB1(RCC_tenuAPB_PRESCALER APB1Select) {
 	u32 Loc_u32RegTemp = 0;
@@ -261,7 +317,7 @@ void RCC_vidSetPrescalerAPB2(RCC_tenuAPB_PRESCALER APB2Select) {
 	RCC_CFGR_REG = Loc_u32RegTemp;
 
 }
-void RCC_vidGetClockSelection(RCC_tenuPLLSrcCLKSelection *CLkSelection) {
+void RCC_vidGetClockSelection(RCC_tenuSrcCLKSelection *CLkSelection) {
 	if ((GET_BIT(RCC_CFGR_REG, 2)) == 0 && (GET_BIT(RCC_CFGR_REG, 3)) == 0) {
 		*CLkSelection = RCC_enuHSI;
 	} else if ((GET_BIT(RCC_CFGR_REG, 2)) == 1
@@ -272,3 +328,4 @@ void RCC_vidGetClockSelection(RCC_tenuPLLSrcCLKSelection *CLkSelection) {
 		*CLkSelection = RCC_enuPLL;
 	}
 }
+
