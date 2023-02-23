@@ -8,12 +8,13 @@
 #ifndef GPIO_PRIVATE_H_
 #define GPIO_PRIVATE_H_
 
-#define GPIOA_BaseAddress		    (0x40020000)
-#define GPIOB_BaseAddress 	    	(0x40020400)
-#define GPIOC_BaseAddress		    (0x40020800)
-#define GPIOD_BaseAddress 			(0x40020C00)
-#define GPIOE_BaseAddress		    (0x40021000)
-#define GPIOH_BaseAddress		    (0x40021C00)
+#define GPIOA		    (void*)(0x40020000)
+#define GPIOB 	    	(void*)(0x40020400)
+#define GPIOC		    (void*)(0x40020800)
+#define GPIOD 			(void*)(0x40020C00)
+#define GPIOE		    (void*)(0x40021000)
+#define GPIOH		    (void*)(0x40021C00)
+
 
 typedef struct{
 	u32 MODER;			//00
@@ -30,12 +31,6 @@ typedef struct{
 
 
 
-GPIOx_t* const GPIOA=(GPIOx_t*)GPIOA_BaseAddress;
-GPIOx_t* const GPIOB=(GPIOx_t*)GPIOB_BaseAddress;
-GPIOx_t* const GPIOC=(GPIOx_t*)GPIOC_BaseAddress;
-GPIOx_t* const GPIOD=(GPIOx_t*)GPIOD_BaseAddress;
-GPIOx_t* const GPIOE=(GPIOx_t*)GPIOE_BaseAddress;
-GPIOx_t* const GPIOH=(GPIOx_t*)GPIOH_BaseAddress;
 
 
 #endif /* GPIO_PRIVATE_H_ */

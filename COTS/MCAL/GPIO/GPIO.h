@@ -5,9 +5,14 @@
  *      Author: alaa
  */
 
+
+/*******************************************************************************
+ ***                            Types Declaration                            ***
+ ******************************************************************************/
+
 #ifndef GPIO_H_
 #define GPIO_H_
-
+								/*Mode Selection */
 #define GPIO_MODE_OUTPUT_Digital		0b01
 #define GPIO_MODE_AF					0b10
 #define GPIO_MODE_INTPUT_Digital		0b00
@@ -38,6 +43,7 @@
 #define GPIO_MODE_INPUT_OD_PD			0b01000
 
 #define GPIO_MODE_Analog				0b00011
+					/*Speed Selection */
 
 #define GPIO_OUTPUT_SPEED_LOW			0b00
 #define GPIO_OUTPUT_SPEED_MEDIUM		0b01
@@ -85,12 +91,67 @@ typedef enum {
 	GPIO_High
 } GPIO_tenuValue;
 
-GPIO_tenuErrorStatus GPIO_Init(void);
-GPIO_tenuErrorStatus GPIO_SetPinMode(GPIO_tenuPortId PortSelection,GPIO_tenuPinNumber PinSelection ,u8 ModeSelection,u8 SpeedSelection);
-GPIO_tenuErrorStatus GPIO_SetPinValue(GPIO_tenuPortId PortSelection,GPIO_tenuPinNumber PinSelection ,GPIO_tenuValue	valueSelection);
-GPIO_tenuErrorStatus GPIO_GetPinValue(GPIO_tenuPortId PortSelection,GPIO_tenuPinNumber PinSelection ,u8* Add_u32Data);
+typedef struct{
+	void* Port;
+	u8 Pin;
+	u32 ModeSelect;
+	u8 OutPutValue;
+	u8 Speed;
+}GPIO_tInit;
+///////////////////////////////////////////////////////////////////////////////
 
-GPIO_tenuErrorStatus GPIO_SetPortMode(GPIO_tenuPortId PortSelection,u8 ModeSelection);
-GPIO_tenuErrorStatus GPIO_SetPortValue(GPIO_tenuPortId PortSelection,GPIO_tenuValue valueSelection);
-GPIO_tenuErrorStatus GPIO_GetPortValue(GPIO_tenuPortId PortSelection,u32* Add_u32Data);
+/*******************************************************************************
+ ****                    Functions Prototypes                              ****
+ ******************************************************************************/
+
+/******************************************************************************
+ * @brief 	  			 GPIO_Init (for initialize certain pin in port with parameter)	.
+ * @param 					PTR to Init struct
+ * @return 					GPIO_tenuErrorStatus
+ *************************************************************************** */
+GPIO_tenuErrorStatus GPIO_Init(GPIO_tInit* GPIO_Init);
+/******************************************************************************
+ * @brief 	  			 GPIO_SetPinMode (for setting pin mode )	.
+ * @param 					Port :pin in it
+ * 							Pin:to set its mode
+ * 							Mode:between Input/out OD PP....
+ * 							Speed
+ * @return 					GPIO_tenuErrorStatus
+ *************************************************************************** */
+GPIO_tenuErrorStatus GPIO_SetPinMode(void* PortSelection,GPIO_tenuPinNumber PinSelection ,u8 ModeSelection,u8 SpeedSelection);
+/******************************************************************************
+ * @brief 	  			 GPIO_SetPinValue (for setting Output Pin value )	.
+ * @param 					Port :pin in it
+ * 							Pin:to set its value
+ * 							Value :High or Low
+ * @return 					GPIO_tenuErrorStatus
+ *************************************************************************** */
+GPIO_tenuErrorStatus GPIO_SetPinValue(void* PortSelection,GPIO_tenuPinNumber PinSelection ,GPIO_tenuValue	valueSelection);
+/******************************************************************************
+ * @brief 	  			 GPIO_GetPinValue (for setting input Pin value )	.
+ * @param 					Port :pin in it
+ * 							Pin:to get value from
+ * 							PTR :to hold the value
+ * @return 					GPIO_tenuErrorStatus
+ *************************************************************************** */
+GPIO_tenuErrorStatus GPIO_GetPinValue(void* PortSelection,GPIO_tenuPinNumber PinSelection ,u8* Add_u32Data);
+/******************************************************************************
+ * @brief 	  			 GPIO_SetPortMode (for setting port mode )	.
+ * @param 					Port :to set mode
+ * 							Mode:between Input/out OD PP....
+ * 							Speed
+ * @return 					GPIO_tenuErrorStatus
+ *************************************************************************** */
+GPIO_tenuErrorStatus GPIO_SetPortMode(void* PortSelection,u8 ModeSelection,u8 SpeedSelection);
+/******************************************************************************
+ * @brief 	  			 GPIO_SetPortValue (for setting Output port value )	.
+ * @param 					Port :to set value
+ * 							Value :High or Low
+ * @return 					GPIO_tenuErrorStatus
+ *************************************************************************** */
+GPIO_tenuErrorStatus GPIO_SetPortValue(void* PortSelection,GPIO_tenuValue valueSelection);
+GPIO_tenuErrorStatus GPIO_GetPortValue(void* PortSelection,u32* Add_u32Data);
 #endif /* GPIO_H_ */
+
+
+
