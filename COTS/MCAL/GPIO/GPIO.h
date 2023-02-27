@@ -12,6 +12,7 @@
 
 #ifndef GPIO_H_
 #define GPIO_H_
+#include "Std_types.h"
 								/*Mode Selection */
 #define GPIO_MODE_OUTPUT_Digital		0b01
 #define GPIO_MODE_AF					0b10
