@@ -8,6 +8,20 @@
 #ifndef NVIC_H_
 #define NVIC_H_
 
+#define NVIC_PriortyBits_1   0
+#define NVIC_PriortyBits_2   1
+#define NVIC_PriortyBits_3   2
+#define NVIC_PriortyBits_4   3
+#define NVIC_PriortyBits_5   4
+#define NVIC_PriortyBits_6   5
+#define NVIC_PriortyBits_7   6
+#define NVIC_PriortyBits_8   7
+
+
+#define NVIC_PriortyBitsSelection  NVIC_PriortyBits_4
+#define SUBGROUP_CLR_MASK		( 0xFFFFF8FF)
+#define NVIC_VECTKEY_EN  (0x5FA)
+
 typedef enum {
 	NVIC_enuOK = 0,
 	NVICenuNotOK,
@@ -265,6 +279,14 @@ typedef enum{
 	NVIC_IRQ_Active
 }NVIC_enuActiveStatus;
 
+typedef enum{
+	 NVIC_SubGroup_0= 0x00000000,
+	 NVIC_SubGroup_1= 0x00000400,
+	 NVIC_SubGroup_2= 0x00000500,
+	 NVIC_SubGroup_3= 0x00000600,
+	 NVIC_SubGroup_4= 0x00000700
+}NVIC_enuPriorityGroup_t;
+
 NVIC_tenuErrorStatus NVIC_SetPending(NVIC_enuIRQ_t Cpy_u8IRQn);
 NVIC_tenuErrorStatus NVIC_ClearPending(NVIC_enuIRQ_t Cpy_u8IRQn);
 
@@ -274,10 +296,13 @@ NVIC_tenuErrorStatus NVIC_DisableIRQ(NVIC_enuIRQ_t Cpy_u8IRQn);
 NVIC_tenuErrorStatus NVIC_GetActiveStatus(NVIC_enuIRQ_t Cpy_u8IRQn,u8* ADD_pu8Status);
 
 NVIC_tenuErrorStatus NVIC_SetPriority(NVIC_enuIRQ_t Cpy_u8IRQn, u8 Cpy_u8GroupPriority);
-NVIC_tenuErrorStatus NVIC_SetSubPriority(NVIC_enuIRQ_t Copy_u8GroupPriority);
+NVIC_tenuErrorStatus NVIC_SetSubPriority(NVIC_enuPriorityGroup_t Cpy_u8GroupPriority);
 
 NVIC_tenuErrorStatus NVIC_GenerateSwIRQ(NVIC_enuIRQ_t Cpy_u8IRQn);
 
-NVIC_tenuErrorStatus NVIC_GetPriority(NVIC_enuIRQ_t Cpy_u8IRQn);
+NVIC_tenuErrorStatus NVIC_GetPriority(NVIC_enuIRQ_t Cpy_u8IRQn,u32* Add_u32Priority);
 
+/*returned priority is used to be set in function set priority*/
+NVIC_tenuErrorStatus NVIC_GetEncodingPriority(u8 Cpy_u8NumberOfSubGroup, u8 Cpy_u8SubGroupPriority,
+		u8 Cpy_u8PreemptionPriority,u32* Add_u32ReturnPriority);
 #endif /* NVIC_H_ */

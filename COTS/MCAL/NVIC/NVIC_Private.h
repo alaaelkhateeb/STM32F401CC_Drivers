@@ -16,6 +16,7 @@
 #define NVIC_IABR_BASE  ((volatile u32 *) 0xE000E300)
 #define NVIC_IPR_BASE  ((volatile u32 *) 0xE000E400)
 #define NVIC_STIR      ((volatile u32 *) 0xE000EF00)
+#define NVIC_AIRCR     ((volatile u32 *) 0xE000ED0C)
 
 
 #endif /* NVIC_PRIVATE_H_ */
