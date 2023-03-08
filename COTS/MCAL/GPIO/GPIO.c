@@ -14,7 +14,7 @@
 #include "GPIO.h"
 
 #define OFFSET 2
-#define RegOffset 15
+#define RegOffset 16
 
 GPIO_tenuErrorStatus GPIO_Init(GPIO_tInit* GPIO_Init) {
 	GPIO_tenuErrorStatus Loc_enuStatus = GPIO_enuOK;
