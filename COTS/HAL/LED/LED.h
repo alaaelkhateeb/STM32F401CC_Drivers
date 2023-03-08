@@ -17,8 +17,8 @@
 
 
 
-#define ActiveHigh		1
-#define ActiveLow		0
+#define ActiveHigh		0
+#define ActiveLow		1
 
 
 extern const  LEDCfg_t LED_Config[LED_Count];

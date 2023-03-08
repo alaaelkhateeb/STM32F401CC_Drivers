@@ -14,9 +14,9 @@
 
 const LEDCfg_t LED_Config[LED_Count] = {
 		[LED_Alarm]= {
-				.LEDPin = GPIO_PIN0,
-				.LEDPort = GPIOA,
-				.LEDSpeed = GPIO_OUTPUT_SPEED_LOW,
-				.LEDMode =ActiveHigh
+				.LEDPin = GPIO_PIN13,
+				.LEDPort = GPIOC,
+				.LEDSpeed = GPIO_OUTPUT_SPEED_MEDIUM,
+				.LEDMode =ActiveLow
 				 },
 };
