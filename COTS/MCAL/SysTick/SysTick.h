@@ -34,4 +34,5 @@ STK_tenuErrorStatus STK_Stop(void);
 STK_tenuErrorStatus STK_SetRegisterCallBack(stkcbf_t cbf);
 STK_tenuErrorStatus STK_SetPeriodMS(u16 Cpy_u16TickTime, u32 Cpy_u32Clock);
 
+STK_tenuErrorStatus STK_ReadFlag(u8* Add_u8ReturnF);
 #endif /* SYSTICK_H_ */

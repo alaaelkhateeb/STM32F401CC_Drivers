@@ -22,10 +22,9 @@ NVIC_tenuErrorStatus NVIC_EnableIRQ(NVIC_enuIRQ_t Cpy_u8IRQn) {
 	Loc_u8RegLocation = Cpy_u8IRQn / 32;
 /*
 	 ENABLE THE INTERRUPT*/
+	NVIC->ISER[Loc_u8RegLocation ] = 1 << (Loc_u8BitLocation) ;
 
-	(NVIC_ISER_BASE [Loc_u8RegLocation]) |= (1 << Loc_u8BitLocation);
-
-	if ((NVIC_ISER_BASE  [Loc_u8RegLocation]) & (1 << Loc_u8BitLocation)) {
+	if ((NVIC->ISER[Loc_u8RegLocation ] ) & (1 << Loc_u8BitLocation)) {
 		Loc_enuStatus = NVIC_enuOK;
 	} else {
 		Loc_enuStatus = NVICenuNotOK;
@@ -41,8 +40,9 @@ NVIC_tenuErrorStatus NVIC_DisableIRQ(NVIC_enuIRQ_t Cpy_u8IRQn) {
 	Loc_u8RegLocation = Cpy_u8IRQn / 32;
 
 /*	 DISABLE INTERRUPT*/
-	(NVIC_ICER_BASE  [Loc_u8RegLocation]) |= (1 << Loc_u8BitLocation);
-	if (((NVIC_ICER_BASE[Loc_u8RegLocation]) & (1 << Loc_u8BitLocation)) == 0) {
+	NVIC->ICER[Loc_u8RegLocation ] = 1 << (Loc_u8BitLocation) ;
+
+	if (((NVIC->ICER[Loc_u8RegLocation ]) & (1 << Loc_u8BitLocation)) == 0) {
 		Loc_enuStatus = NVIC_enuOK;
 	} else {
 		Loc_enuStatus = NVICenuNotOK;
@@ -57,8 +57,8 @@ NVIC_tenuErrorStatus NVIC_SetPending(NVIC_enuIRQ_t Cpy_u8IRQn) {
 	Loc_u8BitLocation = Cpy_u8IRQn % 32;
 	Loc_u8RegLocation = Cpy_u8IRQn / 32;
 
-	(NVIC_ISPR_BASE  [Loc_u8RegLocation]) |= (1 << Loc_u8BitLocation);
-	if ((NVIC_ISPR_BASE  [Loc_u8RegLocation]) & (1 << Loc_u8BitLocation)) {
+	NVIC->ISPR[ Loc_u8RegLocation ] = 1 << ( Loc_u8BitLocation ) ;
+	if ((NVIC->ISPR[ Loc_u8RegLocation ]) & (1 << Loc_u8BitLocation)) {
 		Loc_enuStatus = NVIC_enuOK;
 	} else {
 		Loc_enuStatus = NVICenuNotOK;
@@ -73,8 +73,8 @@ NVIC_tenuErrorStatus NVIC_ClearPending(NVIC_enuIRQ_t Cpy_u8IRQn) {
 	Loc_u8BitLocation = Cpy_u8IRQn % 32;
 	Loc_u8RegLocation = Cpy_u8IRQn / 32;
 
-	(NVIC_ICPR_BASE  [Loc_u8RegLocation]) |= (1 << Loc_u8BitLocation);
-	if (((NVIC_ICPR_BASE[Loc_u8RegLocation]) & (1 << Loc_u8BitLocation))  == 0) {
+	NVIC->ICPR[ Loc_u8RegLocation ] = 1 << ( Loc_u8BitLocation ) ;
+	if ((NVIC->ICPR[ Loc_u8RegLocation ]) & (1 << Loc_u8BitLocation)) {
 		Loc_enuStatus = NVIC_enuOK;
 	} else {
 		Loc_enuStatus = NVICenuNotOK;
@@ -91,7 +91,7 @@ NVIC_tenuErrorStatus NVIC_GetActiveStatus(NVIC_enuIRQ_t Cpy_u8IRQn,
 	Loc_u8BitLocation = Cpy_u8IRQn % 32;
 	Loc_u8RegLocation = Cpy_u8IRQn / 32;
 
-	if ((NVIC_IABR_BASE  [Loc_u8RegLocation]) & (1 << Loc_u8BitLocation)) {
+	if ((NVIC->IAPR[ Loc_u8RegLocation ]) & (1 << Loc_u8BitLocation)) {
 		*ADD_pu8Status = NVIC_IRQ_Active;
 	} else {
 		*ADD_pu8Status = NVIC_IRQ_NotActive;
@@ -102,13 +102,10 @@ NVIC_tenuErrorStatus NVIC_GetActiveStatus(NVIC_enuIRQ_t Cpy_u8IRQn,
 NVIC_tenuErrorStatus NVIC_SetPriority(NVIC_enuIRQ_t Cpy_u8IRQn,
 		u8 Cpy_u8GroupPriority) {
 	NVIC_tenuErrorStatus Loc_enuStatus = NVIC_enuOK;
-	u8 Loc_u8BitLocation = 0, Loc_u8RegLocation = 0;
 
-	Loc_u8BitLocation = Cpy_u8IRQn % 4;
-	Loc_u8RegLocation = Cpy_u8IRQn / 4; /////or /32 not sure
 
-	(NVIC_IPR_BASE [Loc_u8RegLocation]) |= Cpy_u8GroupPriority;
 
+	NVIC->IPR[ Cpy_u8IRQn / 4 ] = Cpy_u8GroupPriority ;
 	return Loc_enuStatus;
 }
 NVIC_tenuErrorStatus NVIC_GenerateSwIRQ(NVIC_enuIRQ_t Cpy_u8IRQn) {

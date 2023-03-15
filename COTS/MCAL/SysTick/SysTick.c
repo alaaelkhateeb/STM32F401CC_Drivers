@@ -58,6 +58,16 @@ STK_tenuErrorStatus STK_SetPeriodMS(u16 Cpy_u16TickTime, u32 Cpy_u32Clock) {
 	STK_LOAD = Loc_u32LoadTemp;
 	return STK_Status;
 }
+STK_tenuErrorStatus STK_ReadFlag(u8* Add_u8ReturnF){
+	STK_tenuErrorStatus STK_Status = STK_enuOK;
+	if ((STK_CTRL) & (1 << 16)) {
+		*Add_u8ReturnF = 1;
+	} else {
+		*Add_u8ReturnF = 0;
+	}
+
+	return STK_Status;
+}
 
 void SysTick_Handler() {
 	if (AppCbf) {
