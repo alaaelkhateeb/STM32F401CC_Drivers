@@ -19,8 +19,8 @@
 
 
 #define NVIC_PriortyBitsSelection  NVIC_PriortyBits_4
-#define SUBGROUP_CLR_MASK		( 0xFFFFF8FF)
-#define NVIC_VECTKEY_EN  (0x5FA)
+#define SUBGROUP_CLR_MASK	 0xFFFFF8FF
+#define NVIC_VECTKEY_EN  0x5FA
 
 typedef enum {
 	NVIC_enuOK = 0,
