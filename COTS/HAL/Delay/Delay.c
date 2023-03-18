@@ -14,6 +14,7 @@
 
 void delay_ms(u32 cpy_u32Time) {
 	u8 cpy_u8Temp = 0;
+	STK_Init();
 	STK_Stop();
 	STK_SetPeriodMS(cpy_u32Time, CLkSystem);
 	STK_Start();

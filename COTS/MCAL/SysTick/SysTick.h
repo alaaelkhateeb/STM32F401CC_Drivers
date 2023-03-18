@@ -9,6 +9,7 @@
 #define SYSTICK_H_
 
 typedef void (*stkcbf_t)(void);
+
 #define SysTick_IntCLRMask		0xFFFFFFF8
 #define SysTick_EnDisMask  		0xFFFFFFFE
 #define SysTick_ClkSrcMask      0xFFFFFFFB
@@ -28,7 +29,7 @@ typedef enum {
 	STK_enuOK = 0, STKenuNotOK, STK_enuTimeOut, STK_enuWrongValue, STK_NullPtr
 
 } STK_tenuErrorStatus;
-
+STK_tenuErrorStatus STK_Init(void);
 STK_tenuErrorStatus STK_Start(void);
 STK_tenuErrorStatus STK_Stop(void);
 STK_tenuErrorStatus STK_SetRegisterCallBack(stkcbf_t cbf);

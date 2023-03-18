@@ -14,13 +14,21 @@
 #include "SysTick_Private.h"
 
 static stkcbf_t AppCbf;
+
+STK_tenuErrorStatus STK_Init(void){
+	STK_tenuErrorStatus STK_Status = STK_enuOK;
+	STK_CTRL &= SysTick_EnDisMask;
+	STK_CTRL |= SysTick_Disable;
+	STK_CTRL &= SysTick_ClkSrcMask;
+	STK_CTRL |= SysTick_ClkSrc_Selection;
+
+	return STK_Status;
+}
 STK_tenuErrorStatus STK_Start(void) {
 	STK_tenuErrorStatus STK_Status = STK_enuOK;
 	STK_CTRL &= SysTick_IntCLRMask;
 	STK_CTRL |= SysTick_EXReqON;
 
-	STK_CTRL &= SysTick_ClkSrcMask;
-	STK_CTRL |= SysTick_ClkSrc_Selection;
 
 	STK_CTRL &= SysTick_EnDisMask;
 	STK_CTRL |= SysTick_Enable;
@@ -52,8 +60,10 @@ STK_tenuErrorStatus STK_SetPeriodMS(u16 Cpy_u16TickTime, u32 Cpy_u32Clock) {
 
 	if ((STK_CTRL & SysTick_ClkSrc_AHB )!= 0) {
 		Loc_u32LoadTemp = (Cpy_u16TickTime * Cpy_u32Clock) / 1000;
+		Loc_u32LoadTemp-=1;
 	} else {
 		Loc_u32LoadTemp = (Cpy_u16TickTime * Cpy_u32Clock) / 8000;
+		Loc_u32LoadTemp-=1;
 	}
 	STK_LOAD = Loc_u32LoadTemp;
 	return STK_Status;
