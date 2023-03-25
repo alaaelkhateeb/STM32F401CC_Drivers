@@ -21,6 +21,11 @@ typedef enum{
 	BTN_enuWrongValue,
 	BTN_NullPtr
 }BTN_tenuErrorStatus;
+typedef enum{
+	BTN_enuReleased = 0,
+	BTN_enuPressed
+}BTN_tenuStatus;
+
 
 extern const  BTNCfg_t BTN_Config[BTN_Count];
 

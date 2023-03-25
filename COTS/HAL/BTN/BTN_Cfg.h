@@ -9,7 +9,7 @@
 #define BTN_CFG_H_
 
 
-
+#define Btn_DebounceMax    500
 
 typedef enum{
 	BTN_Alarm,
@@ -22,5 +22,6 @@ typedef struct {
 	u8 BTNMode;
 	u8 BTNSpeed;
 } BTNCfg_t;
+
 
 #endif /* BTN_CFG_H_ */
