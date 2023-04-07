@@ -15,9 +15,10 @@
 #include "Sched_Cfg.h"
 extern void App2(void);
 extern void App1(void);
+extern void app_Switch(void);
 
-const TaskInfo_t TaskInfo[NumberOfTasks]= {
-	[0]= {
+extern const TaskInfo_t TaskInfo[NumberOfTasks]= {
+/*	[0]= {
 		.name="App1",
 		.Periodms=1000,
 		.StartDelay=0,
@@ -28,5 +29,11 @@ const TaskInfo_t TaskInfo[NumberOfTasks]= {
 		.Periodms=2000,
 		.StartDelay=0,
 		.cbf=App2,
-	},
+	},*/
+	[0] = {
+			.name = "switch_task",
+			.Periodms = 500,
+			.StartDelay = 0,
+			.cbf = app_Switch
+	}
 };

@@ -7,9 +7,9 @@
 
 #ifndef SCHED_CFG_H_
 #define SCHED_CFG_H_
-#define NumberOfTasks   5
+#define NumberOfTasks   1
 
 
 
-extern const TaskInfo_t TaskInfo[NumberOfTasks];
+extern  const TaskInfo_t TaskInfo[NumberOfTasks];
 #endif /* SCHED_CFG_H_ */

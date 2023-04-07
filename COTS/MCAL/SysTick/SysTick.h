@@ -21,7 +21,7 @@ typedef void (*stkcbf_t)(void);
 #define SysTick_EXReqON			0x00000002
 #define SysTick_EXReqOFF		    0x00000000
 
-#define SysTick_ClkSrc_Selection		SysTick_ClkSrc_AHB_Div8
+#define SysTick_ClkSrc_Selection		SysTick_ClkSrc_AHB
 #define SysTick_ClkSrc_AHB_Div8			0x00000000
 #define SysTick_ClkSrc_AHB				0x00000004
 

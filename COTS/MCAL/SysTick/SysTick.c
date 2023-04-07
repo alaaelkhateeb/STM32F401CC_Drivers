@@ -58,13 +58,14 @@ STK_tenuErrorStatus STK_SetPeriodMS(u16 Cpy_u16TickTime, u32 Cpy_u32Clock) {
 	STK_tenuErrorStatus STK_Status = STK_enuOK;
 	u32 Loc_u32LoadTemp = 0;
 
-	if ((STK_CTRL & SysTick_ClkSrc_AHB )!= 0) {
-		Loc_u32LoadTemp = (Cpy_u16TickTime * Cpy_u32Clock) / 1000;
-		Loc_u32LoadTemp-=1;
-	} else {
-		Loc_u32LoadTemp = (Cpy_u16TickTime * Cpy_u32Clock) / 8000;
-		Loc_u32LoadTemp-=1;
+
+	Loc_u32LoadTemp=Cpy_u32Clock*Cpy_u16TickTime;
+	Loc_u32LoadTemp/=1000;
+	if (SysTick_ClkSrc_Selection==SysTick_ClkSrc_AHB_Div8) {
+
+		Loc_u32LoadTemp/=8;
 	}
+	Loc_u32LoadTemp-=1;
 	STK_LOAD = Loc_u32LoadTemp;
 	return STK_Status;
 }
@@ -84,3 +85,6 @@ void SysTick_Handler() {
 		AppCbf();
 	}
 }
+
+
+

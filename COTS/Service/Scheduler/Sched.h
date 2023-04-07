@@ -9,7 +9,7 @@
 #define SCHED_H_
 
 
-#define SCHED_Period_ms		1
+//#define SCHED_Period_ms		1
 typedef void (*RunnableCbf_t)(void);
 
 typedef struct {
@@ -21,7 +21,7 @@ typedef struct {
 }TaskInfo_t;
 
 typedef struct{
-	//TaskInfo_t* taskinfo;
+	TaskInfo_t* taskinfo;
 	u32 RemainTime;
 }Task_t;
 
@@ -36,7 +36,7 @@ typedef enum {
 } Sched_tenuErrorStatus;
 
 Sched_tenuErrorStatus Sched_Init(void);
-Sched_tenuErrorStatus Sched_Start(void);
+void Sched_Start(void);
 static void Sched(void);
 void tick_cbf(void);
 
